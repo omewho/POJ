@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+
+
+void printArr(int *arr, int num) {
+	
+	for(int i = 0; i < num; i++) {
+		if(i) cout<<" ";
+		cout<<arr[i];
+	}
+	cout<<endl;
+}
+
+int main() {
+	
+    string str;
+	int freq[27], size = sizeof(freq) / sizeof(freq[0]), i, len;
+	
+	
+	while(1) {
+		priority_queue<int, vector<int>, greater<int> > pq;
+		memset(freq, 0, sizeof(freq));
+		cin>>str;
+		
+		if(str == "END") break;
+		len = str.size();
+		//printf("%s %d\n", str, len);
+		//cout<<str<<" "<<len<<endl;
+		for(i = 0; i < len; i++) {
+			if(str[i] == '_') freq[26]++;
+			else freq[str[i] - 'A']++;
+		}
+		
+		for(i = 0; i < size; i++) {
+			if(freq[i]) pq.push(freq[i]);
+		}
+//		printArr(freq, size);
+		
+//		for(i = 0; i < size; i++){
+//			if(i) printf(" ");
+//			if(i == 26) printf("_");
+//			else printf("%c", 'A' + i);
+//		}
+//		printf("\n");
+		
+		int wpl = len, x, y, sum;
+		while(pq.size() > 2) {
+			x = pq.top();
+			pq.pop();
+			y = pq.top();
+			pq.pop();
+			sum = x + y;
+			pq.push(sum);
+			//printf("x %d y %d\n", x, y);
+			wpl += sum;
+		}
+		
+		printf("%d %d %.1lf\n", len * 8, wpl, len * 8 * 1.0 / wpl);
+
+	}
+	
+	return 0; 
+}
