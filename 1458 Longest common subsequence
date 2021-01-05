@@ -1,0 +1,43 @@
+#include <cstdio>
+#include <string>
+
+const int MAX = 1000;
+
+int maxLen[MAX][MAX];
+
+using namespace std;
+
+class Solution {
+public:
+	void resetdp(int m, int n) {
+		for(int row = 0; row < m + 1; row++) {
+			for(int col = 0; col < n + 1; col++) {
+				maxLen[row][col] = 0;
+			}
+		}
+	}
+    int longestCommonSubsequance(string s1, string s2) {
+    	int m, n;
+    	m = s1.length(), n = s2.length();
+    	resetdp(m, n);
+    	for(int row = 1; row < m + 1; row++) {
+    		for(int col = 1; col < n + 1; col++) {
+    			if(s1[row - 1] == s2[col - 1]) maxLen[row][col] = maxLen[row - 1][col - 1] + 1;
+    			else maxLen[row][col] = max(maxLen[row - 1][col], maxLen[row][col - 1]);
+			}
+		}
+		
+		return maxLen[m][n];
+	}  
+};
+
+int main() {
+	
+	char str1[MAX], str2[MAX];
+	while( scanf("%s%s", str1, str2) == 2) {
+		int lcs = Solution().longestCommonSubsequance(str1, str2);
+		printf("%d\n", lcs);
+	}
+	
+	return 0;
+}
