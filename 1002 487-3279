@@ -1,0 +1,53 @@
+#include <cstdio>
+#include <string>
+#include <map>
+
+using namespace std;
+
+map<int, int> tel_app;
+map<int, int>::iterator mpit;
+
+const int MAX = 80; //To read the scrambled phone number
+int book[26] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, -1, 7, 7, 8, 8, 8, 9, 9, 9, -1};
+
+int getNumber(string str) {
+	int n = str.length();
+	int ans = 0;
+	
+	for(int i = 0; i < n; i++) {
+		if(isdigit(str[i])) ans = ans * 10 +  str[i] - '0';		
+		else if(isalpha(str[i])) {
+			if(str[i] == 'Q' || str[i] == 'Z') continue;
+			ans = ans * 10 +  book[str[i] - 'A'];
+		}
+	}
+	
+	return ans;
+}
+
+int main() {
+	
+	int n;
+	scanf("%d\n", &n);
+	char str[MAX];
+	bool nodup = true;
+	
+	for(int i = 0; i < n; i++) {
+		scanf("%s", str);
+		int number = getNumber(str);
+		//printf("number = %d\n", number);
+		//printf("%s\n", number.c_str());
+		tel_app[number]++;	
+	}
+	
+	for(mpit = tel_app.begin(); mpit != tel_app.end(); mpit++) {
+		if(mpit->second > 1) {
+			printf("%03d-%04d %d\n", mpit->first / 10000, mpit->first % 10000, mpit->second);
+			if(nodup) nodup = false;
+		}
+	}
+	
+	if(nodup) printf("No duplicates.\n");
+	
+	return 0;
+}
